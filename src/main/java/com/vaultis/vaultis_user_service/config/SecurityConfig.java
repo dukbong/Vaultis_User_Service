@@ -30,10 +30,7 @@ public class SecurityConfig {
 			.oauth2Login(oauth2 -> oauth2
 					.loginPage("/login/google")
 					.userInfoEndpoint(endPoint -> endPoint.userService(customOAuth2UserService))
-					.defaultSuccessUrl("/", true))
-			.logout(logout -> logout.logoutSuccessUrl("/"))
-			;
-		
+					.defaultSuccessUrl("/", true));
 		return http.build();
 	}
 
