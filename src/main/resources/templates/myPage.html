@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google OAuth2 Login</title>
+    <style>
+        /* 전체 레이아웃 및 중앙 정렬 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f3f4;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: white;
+            width: 100%;
+            max-width: 400px; /* 로그인 박스 가로 크기 */
+            border-radius: 8px;
+            box-sizing: border-box;
+            position: relative; /* 로그아웃 버튼을 우측 상단에 고정하기 위해 relative 사용 */
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #202124;
+            margin-bottom: 30px;
+        }
+
+        .google-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 14px;
+            background-color: #4285F4;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .google-btn:hover {
+            background-color: #357AE8;
+        }
+
+        .google-icon {
+            width: 20px;
+            margin-right: 10px;
+        }
+
+        /* 로그인 후 상태 */
+        .welcome-section {
+            margin-top: 30px;
+        }
+
+        .welcome-section h4 {
+            font-size: 1.2rem;
+            color: #202124;
+            margin-bottom: 20px;
+        }
+
+        .key-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #34A853;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .key-button:hover {
+            background-color: #2C8D47;
+        }
+
+        /* 로그인 정보 안내 */
+        .login-info {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .login-info a {
+            color: #4285F4;
+            text-decoration: none;
+        }
+
+        .login-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* 로그아웃 버튼 스타일 */
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #db4437;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c1351d;
+        }
+
+        /* Storage 버튼 스타일 */
+        .storage-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #fbbc05;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .storage-btn:hover {
+            background-color: #f49f00;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VAULT'IS</h1>
+
+        <!-- 로그인되지 않은 경우 -->
+        <div th:if="${principal == null}">
+            <a th:href="@{/login/google}">
+                <button class="google-btn">
+                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google.png" alt="Google Logo"/>
+                    Sign in with Google
+                </button>
+            </a>
+        </div>
+
+        <!-- 로그인된 경우 -->
+        <div th:if="${principal != null}" class="welcome-section">
+            <!-- Storage 버튼 추가 -->
+            <button class="storage-btn" th:href="@{/storage}">Storage</button>
+			<button class="logout-btn" type="button" onclick="window.location.href='/logout';">EXIT</button>
+            <h4 th:text="${principal.getAttribute('email')}"></h4>
+            <a th:href="@{/key/issue}">
+                <button class="key-button">API Key</button>
+            </a>
+        </div>
+
+        <!-- 로그인 정보 안내 -->
+        <div class="login-info">
+            <p>check out <a href="#">how to use</a> the VAULT'IS service and protect your Personal Information.</p>
+        </div>
+    </div>
+</body>
+</html>

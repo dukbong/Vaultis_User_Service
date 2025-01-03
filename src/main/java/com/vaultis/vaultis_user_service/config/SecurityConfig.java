@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.vaultis.vaultis_user_service.service.CustomLogoutSuccessHandler;
 import com.vaultis.vaultis_user_service.service.CustomOAuth2UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,22 +19,34 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	
 	private final CustomOAuth2UserService customOAuth2UserService;
+	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(AbstractHttpConfigurer::disable)  // CSRF 비활성화
-				.headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))  // 헤더 설정
+				.csrf(AbstractHttpConfigurer::disable)  
+				.headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)) 
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/", "/login/google").permitAll()  // 메인 페이지와 구글 로그인 링크는 허용
-						.anyRequest().authenticated()  // 그 외 경로는 인증 필요
+						.requestMatchers("/resources/**").permitAll()
+						.requestMatchers("/", "/oauth2/**", "/h2-console/**").permitAll()
+						.anyRequest().authenticated()  
 				)
-				.logout(logout -> logout.logoutSuccessUrl("/"))  // 로그아웃 후 리다이렉트
+				// handler 만들어서 로그아웃시 OAuth2User에 담긴걸 비워야한다. 
+				.logout(logout -> logout
+						.logoutUrl("/logout")
+						.logoutSuccessHandler(customLogoutSuccessHandler)
+						.logoutSuccessUrl("/")
+						.permitAll()
+				)  
 				.oauth2Login(oauth2 -> oauth2
-						.userInfoEndpoint(endPoint -> endPoint.userService(customOAuth2UserService))  // 커스텀 OAuth2 서비스
-						.defaultSuccessUrl("/", true)  // 로그인 성공 후 메인 페이지로 리다이렉트
+						.userInfoEndpoint(endPoint -> endPoint.userService(customOAuth2UserService)) 
+						.defaultSuccessUrl("/", true) 
+						.permitAll()
 				);
+
 		return http.build();
 	}
+	
+	
 
 }
