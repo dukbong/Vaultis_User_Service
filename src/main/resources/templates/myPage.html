@@ -146,9 +146,9 @@
 
         <!-- 로그인되지 않은 경우 -->
         <div th:if="${principal == null}">
-            <a th:href="@{/login/google}">
+            <a href="http://localhost:8890/oauth2/authorization/google">
                 <button class="google-btn">
-                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google.png" alt="Google Logo"/>
+<!--                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google.png" alt="Google Logo"/>-->
                     Sign in with Google
                 </button>
             </a>

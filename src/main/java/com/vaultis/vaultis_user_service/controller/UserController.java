@@ -1,16 +1,19 @@
 package com.vaultis.vaultis_user_service.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.net.http.HttpRequest;
+
 @Controller
 public class UserController {
 
     @GetMapping("/")
-    public String mainPage(@AuthenticationPrincipal OAuth2User principal, Model model) {
+    public String mainPage(@AuthenticationPrincipal OAuth2User principal, Model model, HttpServletRequest request) {
     	model.addAttribute("principal", principal);
         return "myPage";
     }
@@ -22,8 +25,7 @@ public class UserController {
     
     @GetMapping("/logout")
     public String logout() {
-    	System.out.println(">>>>>>>>>>>>>>");
-    	return "redirect:/";
+    	return "redirect:/user-service";
     }
 
 }
