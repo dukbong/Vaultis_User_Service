@@ -1,8 +1,8 @@
 package com.vaultis.vaultis_user_service.config;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,15 +13,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.vaultis.vaultis_user_service.filter.CustomTokenAuthenticationFilter;
 import com.vaultis.vaultis_user_service.service.CustomLogoutSuccessHandler;
 import com.vaultis.vaultis_user_service.service.CustomOAuth2UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-
-import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -31,6 +33,8 @@ public class SecurityConfig {
 	private final CustomOAuth2UserService customOAuth2UserService;
 	private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 	private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
+	
+	private final CustomTokenAuthenticationFilter customTokenAuthenticationFilter;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -38,14 +42,16 @@ public class SecurityConfig {
 				.csrf(AbstractHttpConfigurer::disable)
 				.headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/resources/**", "/").permitAll()
+						.requestMatchers("/").permitAll()
+						.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 						.anyRequest().authenticated()
 				)
+				.addFilterBefore(customTokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 				.logout(logout -> logout
 						.logoutUrl("/logout")
+						.deleteCookies("google_webgram")
 						.logoutSuccessHandler(customLogoutSuccessHandler)
-						.logoutSuccessUrl("/")
-//						.permitAll()
+						.permitAll()
 				)
 				.oauth2Login(oauth2 -> oauth2
 						.userInfoEndpoint(endPoint -> endPoint.userService(customOAuth2UserService)).successHandler(this::oauth2SuccessHandler)

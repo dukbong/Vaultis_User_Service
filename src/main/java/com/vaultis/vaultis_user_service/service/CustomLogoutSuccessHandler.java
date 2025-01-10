@@ -8,6 +8,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 			request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
 		}
 		
-		response.sendRedirect("/");
+		response.sendRedirect("http://localhost:8000/user-service/");
 	}
 
 }

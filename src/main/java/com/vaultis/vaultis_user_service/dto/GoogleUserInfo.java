@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class GoogleUserInfo {
-    private String email;     // User email
+    private String email;
+    private String name;
 }

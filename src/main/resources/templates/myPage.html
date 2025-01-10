@@ -5,144 +5,257 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google OAuth2 Login</title>
     <style>
-        /* 전체 레이아웃 및 중앙 정렬 */
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f1f3f4;
-        }
+		/* 전체 레이아웃 및 중앙 정렬 */
+		/* 전체 레이아웃 및 중앙 정렬 */
+		body {
+		    font-family: 'Roboto', sans-serif;
+		    margin: 0;
+		    height: 100vh;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    background-color: #f1f3f4;
+		    overflow: hidden; /* 스크롤 방지 */
+		}
+		
+		.container {
+		    text-align: center;
+		    padding: 40px;
+		    background-color: white;
+		    width: 100%;
+		    max-width: 400px; /* 로그인 박스 가로 크기 */
+		    border-radius: 8px;
+		    box-sizing: border-box;
+		    position: relative; /* 로그아웃 버튼을 우측 상단에 고정하기 위해 relative 사용 */
+		    max-height: 100vh; /* 최대 높이를 100vh로 제한 */
+		    overflow-y: auto; /* 내용이 넘칠 경우 세로 스크롤 */
+		}
+		
+		h1 {
+		    font-size: 2.5rem;
+		    color: #202124;
+		    margin-bottom: 30px;
+		}
+		
+		.google-btn {
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    width: 100%;
+		    padding: 14px;
+		    background-color: #4285F4;
+		    border: none;
+		    border-radius: 6px;
+		    color: white;
+		    font-size: 1.1rem;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.google-btn:hover {
+		    background-color: #357AE8;
+		}
+		
+		.google-icon {
+		    width: 20px;
+		    margin-right: 10px;
+		}
+		
+		/* 로그인 후 상태 */
+		.welcome-section {
+		    margin-top: 30px;
+		}
+		
+		.welcome-section h4 {
+		    font-size: 1.2rem;
+		    color: #202124;
+		    margin-bottom: 20px;
+		}
+		
+		.key-button {
+		    width: 100%;
+		    padding: 14px;
+		    background-color: #34A853;
+		    border: none;
+		    border-radius: 6px;
+		    color: white;
+		    font-size: 1rem;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.key-button:hover {
+		    background-color: #2C8D47;
+		}
+		
+		/* 로그인 정보 안내 */
+		.login-info {
+		    margin-top: 20px;
+		    font-size: 0.9rem;
+		    color: #666;
+		}
+		
+		.login-info a {
+		    color: #4285F4;
+		    text-decoration: none;
+		}
+		
+		.login-info a:hover {
+		    text-decoration: underline;
+		}
+		
+		/* 로그아웃 버튼 스타일 */
+		.logout-btn {
+		    position: absolute;
+		    top: 15px;
+		    right: 15px;
+		    background-color: #db4437;
+		    color: white;
+		    border: none;
+		    padding: 8px 12px;
+		    border-radius: 4px;
+		    font-size: 0.9rem;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.logout-btn:hover {
+		    background-color: #c1351d;
+		}
+		
+		/* Storage 버튼 스타일 */
+		.storage-btn {
+		    position: absolute;
+		    top: 15px;
+		    left: 15px;
+		    background-color: #fbbc05;
+		    color: white;
+		    border: none;
+		    padding: 8px 12px;
+		    border-radius: 4px;
+		    font-size: 0.9rem;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.storage-btn:hover {
+		    background-color: #f49f00;
+		}
+		
+		/* 여기부터 키 */
+		.key-info-section {
+		    margin-top: 20px;
+		    width: 100%;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    flex-direction: column;
+		    padding: 20px;
+		}
+		
+		/* Key Information Card */
+		.key-info-card {
+		    background-color: #fff;
+		    padding: 20px;
+		    border-radius: 8px;
+		    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+		    width: 100%;
+		    max-width: 500px;
+		    text-align: left;
+		}
+		
+		/* Title */
+		.key-info-title {
+		    font-size: 1.5rem;
+		    color: #333;
+		    margin-bottom: 15px;
+		}
+		
+		/* Key Label */
+		.key-info-label {
+		    font-size: 1rem;
+		    color: #555;
+		    margin-bottom: 8px;
+		}
+		
+		/* Truncated Key Display */
+		.key-info {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    margin-bottom: 20px;
+		}
+		
+		.key-truncated {
+		    font-family: 'Courier New', Courier, monospace;
+		    background-color: #f4f4f4;
+		    padding: 10px;
+		    border-radius: 4px;
+		    color: #333;
+		    word-wrap: break-word;
+		    white-space: pre-wrap;
+		    max-width: 80%; /* Ensure the key text does not overflow */
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		}
+		
+		.copy-btn {
+		    background-color: #4285F4;
+		    color: white;
+		    border: none;
+		    padding: 8px 12px;
+		    border-radius: 4px;
+		    font-size: 0.9rem;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.copy-btn:hover {
+		    background-color: #357AE8;
+		}
+		
+		@media (max-width: 600px) {
+		    /* Mobile adjustments */
+		    .key-info {
+		        flex-direction: column;
+		        align-items: flex-start;
+		    }
+		
+		    .copy-btn {
+		        margin-top: 10px;
+		    }
+		}
 
-        .container {
-            text-align: center;
-            padding: 40px;
-            background-color: white;
-            width: 100%;
-            max-width: 400px; /* 로그인 박스 가로 크기 */
-            border-radius: 8px;
-            box-sizing: border-box;
-            position: relative; /* 로그아웃 버튼을 우측 상단에 고정하기 위해 relative 사용 */
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #202124;
-            margin-bottom: 30px;
-        }
-
-        .google-btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 14px;
-            background-color: #4285F4;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .google-btn:hover {
-            background-color: #357AE8;
-        }
-
-        .google-icon {
-            width: 20px;
-            margin-right: 10px;
-        }
-
-        /* 로그인 후 상태 */
-        .welcome-section {
-            margin-top: 30px;
-        }
-
-        .welcome-section h4 {
-            font-size: 1.2rem;
-            color: #202124;
-            margin-bottom: 20px;
-        }
-
-        .key-button {
-            width: 100%;
-            padding: 14px;
-            background-color: #34A853;
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .key-button:hover {
-            background-color: #2C8D47;
-        }
-
-        /* 로그인 정보 안내 */
-        .login-info {
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .login-info a {
-            color: #4285F4;
-            text-decoration: none;
-        }
-
-        .login-info a:hover {
-            text-decoration: underline;
-        }
-
-        /* 로그아웃 버튼 스타일 */
-        .logout-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: #db4437;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #c1351d;
-        }
-
-        /* Storage 버튼 스타일 */
-        .storage-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: #fbbc05;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .storage-btn:hover {
-            background-color: #f49f00;
-        }
 
     </style>
 </head>
 <body>
+	<script>
+		function copyToClipboard(keyId) {
+		    // Get the full key text from the hidden textarea
+		    var keyText = document.getElementById(keyId).value;
+		    
+		    // Create a temporary textarea to copy the content
+		    var tempTextarea = document.createElement('textarea');
+		    tempTextarea.value = keyText;
+		    document.body.appendChild(tempTextarea);
+		
+		    // Select the text in the temporary textarea
+		    tempTextarea.select();
+		    tempTextarea.setSelectionRange(0, 99999); // For mobile devices
+		
+		    // Copy the selected text to clipboard
+		    document.execCommand('copy');
+		
+		    // Remove the temporary textarea from the DOM
+		    document.body.removeChild(tempTextarea);
+		
+		    // Alert the user
+		    alert(keyId.charAt(0).toUpperCase() + keyId.slice(1) + ' copied to clipboard!');
+		}
+	</script>
     <div class="container">
-        <h1>VAULT'IS</h1>
+        <h1>WEB-GRAM</h1>
 
         <!-- 로그인되지 않은 경우 -->
         <div th:if="${principal == null}">
@@ -157,12 +270,33 @@
         <!-- 로그인된 경우 -->
         <div th:if="${principal != null}" class="welcome-section">
             <!-- Storage 버튼 추가 -->
-            <button class="storage-btn" th:href="@{/storage}">Storage</button>
-			<button class="logout-btn" type="button" onclick="window.location.href='/logout';">EXIT</button>
-            <h4 th:text="${principal.getAttribute('email')}"></h4>
-            <a th:href="@{/key/issue}">
+            <!--<button class="storage-btn" th:href="@{/storage}">Storage</button>-->
+			<button class="logout-btn" type="button" onclick="window.location.href='http://localhost:8000/user-service/logout';">EXIT</button>
+            <h4 th:text="${principal.email}"></h4>
+            <a th:href="@{http://localhost:8000/user-service/apikey}">
                 <button class="key-button">API Key</button>
             </a>
+			
+			<div th:if="${keyPackage != null}" class="key-info-section">
+			    <div class="key-info-card">
+			        <p class="key-info-label">Public Key:</p>
+			        <div class="key-info">
+			            <span class="key-truncated" th:text="${#strings.substring(keyPackage.publicKey, 0, 20)}	+ '...'"></span>
+			            <button class="copy-btn" onclick="copyToClipboard('public-key')">Copy</button>
+			        </div>
+			
+			        <p class="key-info-label">Private Key:</p>
+			        <div class="key-info">
+			            <span class="key-truncated" th:text="${#strings.substring(keyPackage.privateKey, 0, 20)} + '...'"></span>
+			            <button class="copy-btn" onclick="copyToClipboard('private-key')">Copy</button>
+			        </div>
+			
+			        <!-- Hidden full keys for clipboard copy -->
+			        <textarea id="public-key" style="display: none;" th:text="${keyPackage.publicKey}"></textarea>
+			        <textarea id="private-key" style="display: none;" th:text="${keyPackage.privateKey}"></textarea>
+			    </div>
+			</div>
+
         </div>
 
         <!-- 로그인 정보 안내 -->
