@@ -45,12 +45,10 @@ public class SecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessHandler(customLogoutSuccessHandler)
 						.logoutSuccessUrl("/")
-						.permitAll()
+//						.permitAll()
 				)
 				.oauth2Login(oauth2 -> oauth2
 						.userInfoEndpoint(endPoint -> endPoint.userService(customOAuth2UserService)).successHandler(this::oauth2SuccessHandler)
-//						.defaultSuccessUrl("http://localhost:8000/user-service/", true)
-//						.permitAll()
 				);
 
 		return http.build();
@@ -66,7 +64,8 @@ public class SecurityConfig {
 
 		String tokenValue = authorizedClient.getAccessToken().getTokenValue();
 
-		Cookie cookie = new Cookie(oauth2AuthenticationToken.getAuthorizedClientRegistrationId(), tokenValue);
+		Cookie cookie = new Cookie(oauth2AuthenticationToken.getAuthorizedClientRegistrationId() + "_webgram", tokenValue);
+		cookie.setPath("/");
 		httpServletResponse.addCookie(cookie);
 		// google : token
 
