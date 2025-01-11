@@ -269,7 +269,6 @@
 
         <!-- 로그인된 경우 -->
         <div th:if="${principal != null}" class="welcome-section">
-            <!-- Storage 버튼 추가 -->
             <!--<button class="storage-btn" th:href="@{/storage}">Storage</button>-->
 			<button class="logout-btn" type="button" onclick="window.location.href='http://localhost:8000/user-service/logout';">EXIT</button>
             <h4 th:text="${principal.email}"></h4>

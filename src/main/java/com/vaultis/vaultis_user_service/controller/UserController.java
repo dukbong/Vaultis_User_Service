@@ -1,13 +1,9 @@
 package com.vaultis.vaultis_user_service.controller;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.vaultis.vaultis_user_service.dto.GoogleUserInfo;
 import com.vaultis.vaultis_user_service.dto.KeyPackage;
 import com.vaultis.vaultis_user_service.service.UserService;
 
@@ -21,20 +17,20 @@ public class UserController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-    	GoogleUserInfo principal = null;
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    	if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            principal = (GoogleUserInfo) authentication.getPrincipal();
-        }
-        model.addAttribute("principal", principal);
+//    	GoogleUserInfo principal = null;
+//    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    	if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
+//            principal = (GoogleUserInfo) authentication.getPrincipal();
+//        }
+//        model.addAttribute("principal", principal);
         return "myPage";
     }
     
     @GetMapping("/apikey")
     public String apiKey(Model model) {
-    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    	model.addAttribute("principal", (GoogleUserInfo) authentication.getPrincipal());
     	KeyPackage keyPackage = userService.getKeyPackage();
-    	model.addAttribute("principal", (GoogleUserInfo) authentication.getPrincipal());
     	model.addAttribute("keyPackage", keyPackage);
     	return "myPage";
     }
