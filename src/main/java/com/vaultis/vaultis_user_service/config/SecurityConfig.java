@@ -75,7 +75,8 @@ public class SecurityConfig {
 		httpServletResponse.addCookie(cookie);
 		// google : token
 
-		httpServletResponse.sendRedirect("http://localhost:8000/user-service/");
+//		httpServletResponse.sendRedirect("http://localhost:8000/user-service/");
+		httpServletResponse.sendRedirect("http://webgram.kro.kr/user-service/");
 	}
 
 }

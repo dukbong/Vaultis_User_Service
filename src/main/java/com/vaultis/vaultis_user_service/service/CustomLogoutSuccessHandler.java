@@ -29,7 +29,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 			request.getSession().removeAttribute("SPRING_SECURITY_CONTEXT");
 		}
 		
-		response.sendRedirect("http://localhost:8000/user-service/");
+//		response.sendRedirect("http://localhost:8000/user-service/");
+		response.sendRedirect("http://webgram.kro.kr/user-service/");
 	}
 
 }

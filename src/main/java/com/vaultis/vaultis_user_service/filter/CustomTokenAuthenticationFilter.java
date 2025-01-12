@@ -28,7 +28,6 @@ public class CustomTokenAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 필터 동작");
 		String bearerToken = request.getHeader("authorization");
 		if(StringUtils.hasText(bearerToken)) {
 			String token = bearerToken.substring(7);

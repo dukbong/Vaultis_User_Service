@@ -259,7 +259,8 @@
 
         <!-- 로그인되지 않은 경우 -->
         <div th:if="${principal == null}">
-            <a href="http://localhost:8890/oauth2/authorization/google">
+<!--            <a href="http://localhost:8890/oauth2/authorization/google">-->
+            <a href="http://webgram.kro.kr/user-service/oauth2/authorization/google">
                 <button class="google-btn">
 <!--                    <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google.png" alt="Google Logo"/>-->
                     Sign in with Google
@@ -269,10 +270,11 @@
 
         <!-- 로그인된 경우 -->
         <div th:if="${principal != null}" class="welcome-section">
-            <!--<button class="storage-btn" th:href="@{/storage}">Storage</button>-->
-			<button class="logout-btn" type="button" onclick="window.location.href='http://localhost:8000/user-service/logout';">EXIT</button>
+<!--			<button class="logout-btn" type="button" onclick="window.location.href='http://localhost:8000/user-service/logout';">EXIT</button>-->
+			<button class="logout-btn" type="button" onclick="window.location.href='http://webgram.kro.kr/user-service/logout';">EXIT</button>
             <h4 th:text="${principal.email}"></h4>
-            <a th:href="@{http://localhost:8000/user-service/apikey}">
+<!--            <a th:href="@{http://localhost:8000/user-service/apikey}">-->
+            <a th:href="@{http://webgram.kro.kr/user-service/apikey}">
                 <button class="key-button">API Key</button>
             </a>
 			

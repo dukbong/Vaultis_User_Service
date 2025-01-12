@@ -17,19 +17,11 @@ public class UserController {
 
     @GetMapping("/")
     public String mainPage(Model model) {
-//    	GoogleUserInfo principal = null;
-//    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    	if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-//            principal = (GoogleUserInfo) authentication.getPrincipal();
-//        }
-//        model.addAttribute("principal", principal);
         return "myPage";
     }
     
     @GetMapping("/apikey")
     public String apiKey(Model model) {
-//    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    	model.addAttribute("principal", (GoogleUserInfo) authentication.getPrincipal());
     	KeyPackage keyPackage = userService.getKeyPackage();
     	model.addAttribute("keyPackage", keyPackage);
     	return "myPage";
